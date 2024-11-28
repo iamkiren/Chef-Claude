@@ -1,6 +1,6 @@
 import React from "react";
 import "./Header.css";
-import chefLogo from "../../../public/images/chef-claude-icon.png";
+import chefLogo from "../../images/chef-claude-icon.png";
 
 const Header = () => {
 	return (
