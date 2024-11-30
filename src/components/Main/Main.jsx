@@ -12,15 +12,6 @@ const Main = () => {
 		<li key={ingredient}>{ingredient}</li>
 	));
 
-	function handleSubmit(event) {
-		event.preventDefault();
-		const formData = new FormData(event.currentTarget);
-		const newIngredient = formData.get("ingredient");
-
-		const newIngredients = [...ingredients, newIngredient];
-		setIngredients(newIngredients);
-	}
-
 	function handleAddIngredients(formData) {
 		const newIngredient = formData.get("ingredient");
 		const newIngredients = [...ingredients, newIngredient];
