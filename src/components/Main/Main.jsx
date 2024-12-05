@@ -5,42 +5,55 @@ import IngredientsList from "../IngredientsList/IngredientsList";
 import { getRecipeFromChefClaude, getRecipeFromMistral } from "../../ai";
 
 const Main = () => {
-	const [ingredients, setIngredients] = React.useState([]);
-	const [recipe, setRecipe] = React.useState("");
+  const [ingredients, setIngredients] = React.useState([]);
+  const [recipe, setRecipe] = React.useState("");
 
-	async function getRecipe() {
-		const recipeMarkdown = await getRecipeFromMistral(ingredients);
-		setRecipe(recipeMarkdown);
-	}
+  const recipeSection = React.useRef(null);
 
-	const ingredientsListItems = ingredients.map((ingredient) => (
-		<li key={ingredient}>{ingredient}</li>
-	));
+  React.useEffect(() => {
+    if (recipe !== "" && recipeSection.current !== null) {
+      recipeSection.current.scrollIntoView({ behavior: "smooth" });
+      console.log(recipeSection);
+    }
+  }, [recipe]);
 
-	function addIngredient(formData) {
-		const newIngredient = formData.get("ingredient");
-		setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
-	}
+  async function getRecipe() {
+    const recipeMarkdown = await getRecipeFromMistral(ingredients);
+    setRecipe(recipeMarkdown);
+  }
 
-	return (
-		<main>
-			<form action={addIngredient} className="add-ingredient-form">
-				<input
-					type="text"
-					placeholder="e.g. oregano"
-					aria-label="Add ingredient"
-					name="ingredient"
-				/>
-				<button type="submit">Add ingredient</button>
-			</form>
+  const ingredientsListItems = ingredients.map((ingredient) => (
+    <li key={ingredient}>{ingredient}</li>
+  ));
 
-			{ingredients.length > 0 && (
-				<IngredientsList ingredients={ingredients} getRecipe={getRecipe} />
-			)}
+  function addIngredient(formData) {
+    const newIngredient = formData.get("ingredient");
+    setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
+  }
 
-			{recipe && <ClaudeRecipe recipe={recipe} />}
-		</main>
-	);
+  return (
+    <main>
+      <form action={addIngredient} className="add-ingredient-form">
+        <input
+          type="text"
+          placeholder="e.g. oregano"
+          aria-label="Add ingredient"
+          name="ingredient"
+        />
+        <button type="submit">Add ingredient</button>
+      </form>
+
+      {ingredients.length > 0 && (
+        <IngredientsList
+          ingredients={ingredients}
+          getRecipe={getRecipe}
+          recipeSection={recipeSection}
+        />
+      )}
+
+      {recipe && <ClaudeRecipe recipe={recipe} />}
+    </main>
+  );
 };
 
 export default Main;
